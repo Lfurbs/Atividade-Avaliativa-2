@@ -1,0 +1,90 @@
+#include <stdio.h>
+
+typedef enum { MASCULINO, FEMININO } Sexo;
+
+typedef struct {
+    Sexo sexo;
+    float salario;
+} Assalariado;
+
+Sexo validaSexo() {
+    char sexo;
+
+    do {
+        printf("Informe seu sexo (M/F): ");
+        scanf(" %c", &sexo);
+
+        if (sexo != 'M' && sexo != 'F') {
+            printf("Sexo inválido. Digite M para Masculino ou F para Feminino.\n");
+        }
+
+    } while (sexo != 'M' && sexo != 'F');
+
+    return (sexo == 'M') ? MASCULINO : FEMININO;
+}
+
+float validaSalario() {
+    float salario;
+
+    do {
+        printf("Informe seu salario (tem de ser maior que 1,00): ");
+        scanf("%f", &salario);
+
+        if (salario <= 1.00) {
+            printf("Salário invalido. Digite um valor maior que 1,00.\n");
+        }
+
+    } while (salario <= 1.00);
+
+    return salario;
+}
+
+
+char classificaSalario(float salario) {
+    const float salarioMinimo = 1400.00;
+
+    if (salario > salarioMinimo) {
+        return 'A';  // Acima do salário mínimo
+    } else if (salario < salarioMinimo) {
+        return 'B';  // Abaixo do salário mínimo
+    } else {
+        return 'I';  // Igual ao salário mínimo
+    }
+}
+
+void mostraClassificacao(const Assalariado *assalariado) {
+    printf("\nResultados:\n");
+    printf("Sexo: %s\n", (assalariado->sexo == MASCULINO) ? "Masculino" : "Feminino");
+    printf("Salario: R$ %.2f\n", assalariado->salario);
+
+    switch (classificaSalario(assalariado->salario)) {
+        case 'A':
+            printf("Voce ganha mais do que o salario minimo\n");
+            break;
+        case 'B':
+            printf("Voce ganha menos que o salario minimo\n");
+            break;
+        case 'I':
+            printf("Voce ganha o mesmo valor do salario minimo\n");
+            break;
+    }
+}
+
+int main() {
+    int totalAssalariados;
+
+    printf("Digite o total de assalariados a serem pesquisados: ");
+    scanf("%d", &totalAssalariados);
+
+    for (int i = 1; i <= totalAssalariados; i++) {
+        printf("\nAssalariado %d:\n", i);
+
+        Assalariado assalariado;
+        assalariado.sexo = validaSexo();
+        assalariado.salario = validaSalario();
+
+        mostraClassificacao(&assalariado);
+    }
+
+    return 0;
+}
